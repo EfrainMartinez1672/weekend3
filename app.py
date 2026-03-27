@@ -7,7 +7,9 @@ while p == "e":
     print("4.update")
     print("5.delete")
     print("6.Statistics")
-    print("7.exit")
+    print("7.Save CSV")
+    print("8.Upload CSV")
+    print("9.exit")
     option = input("Which option do you wish to perform?: ")
     if option == "1":
         print()
