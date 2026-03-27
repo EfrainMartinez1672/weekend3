@@ -1,4 +1,8 @@
+from services import add_product, show_inventory, search_product, update_product, delete_product
+
 p = "e"
+inventory = []
+calculate = []
 
 while p == "e":
     print("\n1.add")
@@ -12,15 +16,15 @@ while p == "e":
     print("9.exit")
     option = input("Which option do you wish to perform?: ")
     if option == "1":
-        print()
+        add_product(inventory, calculate)
     elif option == "2":
-        print()
+        show_inventory(inventory)
     elif option == "3":
-        print()
+        search_product(inventory)
     elif option == "4":
-        print()
+        update_product(inventory)
     elif option == "5":
-        print()
+        delete_product(inventory)
     elif option == "6":
         print()
     elif option == "7":
