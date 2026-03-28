@@ -1,20 +1,5 @@
 
-def add_product(inventory, calculate):
-    name = input("enter name product: ")
-    p = "e"
-    while p == "e":
-        try:
-            price = float(input("enter product price: "))
-            if price < 0:
-                print("just put positive numbers.")
-            else:
-                p = "r"
-        except ValueError:
-            print("enter only integers.")
-
-    quantity = input("enter product quantity: ")
-    while not quantity.isdigit():
-        quantity = input("enter product quantity")
+def add_product(inventory, name, quantity, price):
 
     quantity = int(quantity)
 
@@ -24,75 +9,77 @@ def add_product(inventory, calculate):
         "quantity": quantity
     }
     inventory.append(products)
-    calculate.append(price * quantity)
     
 def show_inventory(inventory):
     if inventory: 
         for data in inventory:
             print(f"product: {data["name"]} | price {data["price"]} | quantity {data["quantity"]}")
 
-def search_product(inventory):
-    name = input("enter product name: ")
+def search_product(inventory, name):
     for data in inventory:
         if name.lower() == data["name"]:
             print(f"Product found: {name}")
-        else:
-            print("Product dont found")
+            return
+        
+    print("Product dont found")
 
-def update_product(inventory, calculate):
+def update_product(inventory, name, new_price=None, new_quantity=None):
     p = "e"
     c = "e"
-    print("Which product do you want to modify?")
 
     for data in inventory:
-        print(f"Product: {data['name']} | quantity: {data['quantity']} | price: {data['price']}")
+        if data["name"].lower() == name.lower():
 
-    name = input("Enter product name: ").lower()
-
-    for data in inventory:
-        if data["name"].lower() == name:
             while p == "e":
-                try:
-                    new_price = float(input("Enter new price: "))
-                    if new_price < 0:
+                if new_price is None:
+                    p = "r"
+                else:
+                    try:
+                        new_price = float(new_price)
+                        if new_price < 0:
+                            print("Invalid price.")
+                            return
+                        else:
+                            p = "r"
+                    except ValueError:
                         print("Invalid price.")
-                        continue
-                    else:
-                        p = "r"
-                except ValueError:
-                    print("Invalid")
-                    continue
+                        return
+
             while c == "e":
-                try:
-                    new_quantity = int(input("Enter quantity: "))
-                    if new_quantity < 0:
+                if new_quantity is None:
+                    c = "r"
+                else:
+                    try:
+                        new_quantity = int(new_quantity)
+                        if new_quantity < 0:
+                            print("Invalid quantity.")
+                            return
+                        else:
+                            data["price"] = new_price if new_price is not None else data["price"]
+                            data["quantity"] = new_quantity
+                            print("Product updated successfully")
+                            c = "r"
+                    except ValueError:
                         print("Invalid quantity.")
-                        continue
-                    else:
-                        c = "r"
-                    data["price"] = new_price
-                    data["quantity"] = new_quantity
-                    print("Product updated successfully")
-                    
-                    calculate.append(new_price * new_quantity)
-                    return
-                except ValueError:
-                    print("Invalid")
-                    continue
+                        return
+            return
 
     print("Product not found.")
 
-def delete_product(inventory):
+def delete_product(inventory, name):
 
-    for data in inventory:
-        print(f"Product: {data['name']} | quantity: {data['quantity']} | price: {data['price']}")
-    product = input("which product do you want to remove?: ")
     for  data in inventory:
-        if data["name"].lower() == product:
+        if data["name"].lower() == name:
             inventory.remove(data)
             print("product deleted.")
-        else:
-            print("product not found.")
+            return
+    print("product not found.")
 
-def calculate_statistics():
-    
+def calculate_statistics(inventory, calculate):
+    for data in inventory:
+        price_cl = data.get("price")
+        quantity_cl = data.get("quantity")
+        
+        calculate.append(price_cl * quantity_cl)
+    print(f"total is: {sum(calculate)}")
+    calculate.clear()    
